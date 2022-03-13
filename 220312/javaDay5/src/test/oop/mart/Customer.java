@@ -74,6 +74,7 @@ class VIPCustomer extends Customer {
             counter.paymentProcess(totalPrice, wallet);
         } else {
             System.out.printf("결제 할 금액이 %d 로 없습니다. 감사합니다.", totalPrice.value);
+            System.out.println("---------------------------");
         }
     }
 }

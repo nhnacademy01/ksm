@@ -32,6 +32,6 @@ public class Basket {
         for (Food food : this.foods) {
             if (food != null) System.out.println(food.toString());
         }
-        System.out.println("----------------");
+        System.out.println("---------------------------");
     }
 }

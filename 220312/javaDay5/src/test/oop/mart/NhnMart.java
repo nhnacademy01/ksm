@@ -7,21 +7,21 @@ class NhnMartService {
         NhnMart mart = new NhnMart();
         mart.prepareMart();
 
+        // 일반 고객
         Customer semi = new NormalCustomer(20_000, inputBuyListFromShell(mart));
         semi.take(mart.offerTenPercentCoupon());
         semi.take(mart.offerOneThousandWonCoupon());
         semi.bring(mart.provideBasket());
         semi.addToBasket(mart.getFoodStand());
-
         semi.payTo(mart.getCounter(), mart.noticeTotalPrice(semi.getBasket()));
 
+        // VIP 고객
         Customer semiVip = new VIPCustomer(30_000, inputBuyListFromShell(mart));
         semiVip.take(mart.offerTenPercentCoupon());
         semiVip.take(mart.offerOneThousandWonCoupon());
         semiVip.take(mart.offerVipCoupon());
         semiVip.bring(mart.provideBasket());
         semiVip.addToBasket(mart.getFoodStand());
-
         semiVip.payTo(mart.getCounter(), mart.noticeTotalPrice(semiVip.getBasket()));
     }
 
@@ -60,6 +60,19 @@ public class NhnMart {
     private final FoodStand foodStand = new FoodStand();
     private final Counter counter = new Counter();
 
+    public void prepareMart() {
+        fillFoodStand("양파", 1_000, 2);
+        fillFoodStand("계란한판", 5_000, 5);
+        fillFoodStand("파", 500, 10);
+        fillFoodStand("사과", 2_000, 20);
+    }
+
+    private void fillFoodStand(String name, int price, int quantity) {
+        for (int i = 0; i < quantity; i++) {
+            foodStand.add(new Food(name, price));
+        }
+    }
+
     public boolean checkFoodStand(String name) {
         for (Food food : foodStand.foods) {
             if (food.getName().equals(name)) return true;
@@ -67,20 +80,6 @@ public class NhnMart {
         System.out.println("저희 매장에서 판매하지 않는 식품입니다. 처음부터 다시 입력해 주세요.");
         System.out.println("---------------------------");
         return false;
-    }
-
-    public void prepareMart() {
-        fillFoodStand("양파", 1_000, 2);
-        fillFoodStand("계란한판", 5_000, 5);
-        fillFoodStand("파", 500, 10);
-        fillFoodStand("사과", 2_000, 20);
-        //foodStand.print();
-    }
-
-    private void fillFoodStand(String name, int price, int quantity) {
-        for (int i = 0; i < quantity; i++) {
-            foodStand.add(new Food(name, price));
-        }
     }
 
     public Coupon offerTenPercentCoupon() {

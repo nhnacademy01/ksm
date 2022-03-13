@@ -51,4 +51,14 @@ public class Wallet {
         }
         return null;
     }
+
+    public boolean has(Price price){
+        if (money.getAmounts() < price.value) {
+            System.out.printf("[결제 오류] 잔액이 부족합니다. (현재 잔액 : %d)%n", money.getAmounts());
+            System.out.println("---------------------------");
+            return false;
+        }else{
+            return true;
+        }
+    }
 }
