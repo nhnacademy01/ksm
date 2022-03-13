@@ -7,7 +7,7 @@ class NhnMartService {
         NhnMart mart = new NhnMart();
         mart.prepareMart();
 
-        Customer semi = new Customer(20_000, inputBuyListFromShell());
+        Customer semi = new Customer(20_000, inputBuyListFromShell(mart));
         semi.take(mart.offerTenPercentCoupon());
         semi.take(mart.offerOneThousandWonCoupon());
         semi.bring(mart.provideBasket());
@@ -16,16 +16,18 @@ class NhnMartService {
         semi.payTo(mart.getCounter(), mart.noticeTotalPrice(semi.getBasket()));
     }
 
-    private static BuyList inputBuyListFromShell() {
+    private static BuyList inputBuyListFromShell(NhnMart mart) {
         BuyList buyList = new BuyList();
+        while(true){
         System.out.println("Nhn 마트에 오신 것을 환영합니다. 사고 싶은 물건을 골라주세요 ex)계란한판 2");
         System.out.println("(선택을 마치려면 '완료'를 입력하세요)");
-        inputForm(buyList);
+        if(inputForm(buyList, mart)) break;
+        }
 
         return buyList;
     }
 
-    private static void inputForm(BuyList buyList) {
+    private static boolean inputForm(BuyList buyList, NhnMart mart) {
         Scanner scanner = new Scanner(System.in);
         String name;
         int amount;
@@ -33,7 +35,12 @@ class NhnMartService {
         do {
             System.out.print("> ");
             name = scanner.next();
-            if (name.equals("완료")) break;
+            // 입력 종료
+            if (name.equals("완료")) return true;
+            // 구매목록에 추가하기 전에 식품 매대랑 비교하기
+            if (!mart.checkFoodStand(name)) {
+                return false;
+            }
             amount = scanner.nextInt();
             buyList.add(new BuyList.Item(name, amount));
         } while (true);
@@ -43,6 +50,15 @@ class NhnMartService {
 public class NhnMart {
     private final FoodStand foodStand = new FoodStand();
     private final Counter counter = new Counter();
+
+    public boolean checkFoodStand(String name) {
+        for (Food food : foodStand.foods) {
+            if (food.getName().equals(name)) return true;
+        }
+        System.out.println("저희 매장에서 판매하지 않는 식품입니다. 처음부터 다시 입력해 주세요.");
+        System.out.println("---------------------------");
+        return false;
+    }
 
     public void prepareMart() {
         fillFoodStand("양파", 1_000, 2);
