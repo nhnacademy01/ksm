@@ -17,21 +17,10 @@ public class FoodStand {
         System.out.println("----------------");
     }
 
-    public void getFoodToBasket(BuyList buyList, Basket basket) {
+    public void gaveFoodByBasket(BuyList buyList, Basket basket) {
         for (BuyList.Item item : buyList.items) {
             int addFoodCounts = 0;
-            for (Food food : foods) {
-                if (food.isSame(item)) {
-                    if (addFoodCounts >= item.getAmount()) {
-                        break;
-                    }
-                    basket.add(food);
-                    addFoodCounts++;
-                }
-            }
-            if(addFoodCounts<item.getAmount()){
-                System.out.printf("매장에 있는 %s 가 희망하는 구매 수량보다 적습니다. %d 개만 장바구니에 담습니다.%n",item.getName(),addFoodCounts);
-            }
+            basket.addFoods(this.foods, item, addFoodCounts);
         }
     }
 }

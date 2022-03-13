@@ -19,7 +19,7 @@ public class Customer {
     }
 
     public void addToBasket(FoodStand foodStand) {
-        foodStand.getFoodToBasket(this.buyList,this.basket);
+        foodStand.gaveFoodByBasket(this.buyList,this.basket);
         basket.print();
     }
 
