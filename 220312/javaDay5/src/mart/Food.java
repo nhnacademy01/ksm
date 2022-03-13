@@ -1,4 +1,4 @@
-package test.oop.mart;
+package mart;
 
 public class Food {
     private final String name;

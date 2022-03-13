@@ -1,4 +1,4 @@
-package test.oop.mart;
+package mart;
 
 abstract public class Coupon {
     public Price discount(Price totalPrice){return totalPrice;}

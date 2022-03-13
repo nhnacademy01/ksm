@@ -1,4 +1,4 @@
-package test.oop.mart;
+package mart;
 
 public class Counter {
     public static Price calculateTotalPrice(Basket basket) {

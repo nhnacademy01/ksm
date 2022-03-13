@@ -1,4 +1,4 @@
-package test.oop.mart;
+package mart;
 
 public class Money {
     private int amounts;

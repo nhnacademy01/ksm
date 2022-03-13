@@ -1,4 +1,4 @@
-package test.oop.mart;
+package mart;
 
 abstract public class Customer {
     protected final BuyList buyList;
