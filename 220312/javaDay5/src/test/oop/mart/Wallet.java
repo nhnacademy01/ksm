@@ -3,8 +3,8 @@ package test.oop.mart;
 import java.util.ArrayList;
 
 public class Wallet {
-    private final ArrayList<Coupon> coupons = new ArrayList<>();
-    private final Money money;
+    protected final ArrayList<Coupon> coupons = new ArrayList<>();
+    protected final Money money;
 
     public Wallet(int money) {
         this.money = new Money(money);
@@ -35,6 +35,16 @@ public class Wallet {
     public Coupon getOneThousandWonCoupon() {
         for (Coupon coupon : this.coupons) {
             if (coupon instanceof DiscountOneThousandWon) {
+                this.coupons.remove(coupon);
+                return coupon;
+            }
+        }
+        return null;
+    }
+
+    public Coupon getVIPTwentyPercentCoupon(){
+        for (Coupon coupon : coupons) {
+            if (coupon instanceof VIPDiscountTwentyPercent) {
                 this.coupons.remove(coupon);
                 return coupon;
             }

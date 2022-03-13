@@ -7,21 +7,30 @@ class NhnMartService {
         NhnMart mart = new NhnMart();
         mart.prepareMart();
 
-        Customer semi = new Customer(20_000, inputBuyListFromShell(mart));
+        Customer semi = new NormalCustomer(20_000, inputBuyListFromShell(mart));
         semi.take(mart.offerTenPercentCoupon());
         semi.take(mart.offerOneThousandWonCoupon());
         semi.bring(mart.provideBasket());
         semi.addToBasket(mart.getFoodStand());
 
         semi.payTo(mart.getCounter(), mart.noticeTotalPrice(semi.getBasket()));
+
+        Customer semiVip = new VIPCustomer(30_000, inputBuyListFromShell(mart));
+        semiVip.take(mart.offerTenPercentCoupon());
+        semiVip.take(mart.offerOneThousandWonCoupon());
+        semiVip.take(mart.offerVipCoupon());
+        semiVip.bring(mart.provideBasket());
+        semiVip.addToBasket(mart.getFoodStand());
+
+        semiVip.payTo(mart.getCounter(), mart.noticeTotalPrice(semiVip.getBasket()));
     }
 
     private static BuyList inputBuyListFromShell(NhnMart mart) {
         BuyList buyList = new BuyList();
-        while(true){
-        System.out.println("Nhn 마트에 오신 것을 환영합니다. 사고 싶은 물건을 골라주세요 ex)계란한판 2");
-        System.out.println("(선택을 마치려면 '완료'를 입력하세요)");
-        if(inputForm(buyList, mart)) break;
+        while (true) {
+            System.out.println("Nhn 마트에 오신 것을 환영합니다. 사고 싶은 물건을 골라주세요 ex)계란한판 2");
+            System.out.println("(선택을 마치려면 '완료'를 입력하세요)");
+            if (inputForm(buyList, mart)) break;
         }
 
         return buyList;
@@ -80,6 +89,10 @@ public class NhnMart {
 
     public Coupon offerOneThousandWonCoupon() {
         return new DiscountOneThousandWon();
+    }
+
+    public Coupon offerVipCoupon() {
+        return new VIPDiscountTwentyPercent();
     }
 
     public Basket provideBasket() {

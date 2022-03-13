@@ -23,3 +23,13 @@ class DiscountOneThousandWon extends Coupon{
         return totalPrice;
     }
 }
+
+class VIPDiscountTwentyPercent extends Coupon{
+    private final double TWENTY_PERCENT = 0.2;
+    @Override
+    public Price discount(Price totalPrice) {
+        totalPrice.value -= totalPrice.value*TWENTY_PERCENT;
+        System.out.println("VIP 전용 상시 20% 할인 쿠폰을 사용하셨습니다.");
+        return totalPrice;
+    }
+}
