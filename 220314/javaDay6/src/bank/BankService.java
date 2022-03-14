@@ -3,44 +3,47 @@ package bank;
 public class BankService {
     public static void main(String[] args) {
         Bank nhnBank = new Bank();
-
-        Customer semi = new Customer("semi");
-        try {
-            semi.takeAccountAt("first", nhnBank, new Money(1_000_000, "WON")); //currency가 en 일때랑 amount가 음수일때 예외처리
-            semi.takeAccountAt("second", nhnBank, new Money(1_000_000, "WON"));
-            semi.takeAccountAt("third", nhnBank, new Money(1_000_000, "WON"));
-            semi.takeAccountAt("forth", nhnBank, new Money(1_000_000, "YEN"));
-            semi.takeAccountAt("fifth", nhnBank, new Money(-1_000_000, "WON"));
-        } catch (InvalidMoneyException e) {
-            System.out.println("[초기 금액 오류]");
-            System.out.println("Message : " + e.getMessage());
-        }
-
-        try {
-            //semi.depositTo("first", new Money(-1_000, "WON"));
-            //semi.depositTo("first", new Money(1_000, "YEN"));
-            semi.depositTo("first", new Money(1_000, "DOLOR"));
-        }catch (InvalidMoneyException e){
-            System.out.println("[입금 금액 오류]");
-            System.out.println("Message : " + e.getMessage());
-        }
-
-        try{
-            semi.withdrawalTo("second", new Money(1_000_000_0, "WON"));
-        }catch (InvalidMoneyException e){
-            System.out.println("[출금 금액 오류]");
-            System.out.println("Message : " + e.getMessage());
-        }
-
-        System.out.println("----------------------------------");
-        semi.checkAccountBalance(nhnBank, "first");
-        semi.checkAccountBalance(nhnBank, "second");
-        System.out.println("----------------------------------");
+        //정상 계좌1
+        Customer semi = new Customer("semi", 20_000_000, "WON");
+        nhnBank.openAccount(semi,5_000_000,"WON");
+        semi.depositAccount(100_000,"WON");
+        semi.depositAccount(-100_000,"WON"); // 예외 발생 (잘못된 금액 입력)
+        semi.depositAccount(100_000,"YEN"); // 예외 발생 (지원하지 않는 통화 입금)
+        semi.depositAccount(100_000,"DOLOR"); // 예외 발생 (계좌의 허용 통화와 다른 통화 입금)
+        semi.depositAccount(2_000_000_000,"WON"); // 예외 발생 (고객 지갑 잔액보다 큰 돈을 입금하려는 경우)
+        semi.checkAccountBalance(nhnBank);
+        semi.withdrawalAccount(50_000,"WON");
+        semi.withdrawalAccount(50_000,"YEN"); // 예외 발생 (지원하지 않는 통화 출금)
+        semi.withdrawalAccount(100_000,"DOLOR"); // 예외 발생 (계좌의 허용 통화와 다른 통화 출금)
+        semi.withdrawalAccount(100_000_000,"WON"); // 예외 발생 (계좌의 잔액보다 많은 금액 출금)
+        semi.checkAccountBalance(nhnBank);
+        System.out.println("-----------");
+        //정상 계좌2
+        Customer soon = new Customer("soon", 10_000_000, "DOLOR");
+        nhnBank.openAccount(soon,500_000,"DOLOR");
+        soon.depositAccount(100_000,"WON"); // 예외 발생 (계좌의 허용 통화와 다른 통화 입금)
+        soon.withdrawalAccount(400_000,"DOLOR");
+        soon.checkAccountBalance(nhnBank);
+        System.out.println("-----------");
+        //정상 계좌3
+        Customer sem = new Customer("sem", 100_000, "WON");
+        nhnBank.openAccount(sem,50_000,"WON");
+        sem.checkAccountBalance(nhnBank);
+        System.out.println("-----------");
+        //예외 발생(엔화로 계좌 생성)
+        Customer soo = new Customer("soo", 3_000_000, "WON");
+        nhnBank.openAccount(soo,800_000,"YEN");
+        System.out.println("-----------");
+        //예외 발생(- 음수 돈으로 계좌 생성)
+        Customer joon = new Customer("joon", 50_000, "WON");
+        nhnBank.openAccount(joon,-10_000,"WON");
+        System.out.println("-----------");
         nhnBank.payInterestOnAllAccounts();
-        System.out.println("----------------------------------");
-        semi.checkAccountBalance(nhnBank, "first");
-        semi.checkAccountBalance(nhnBank, "second");
-        System.out.println("----------------------------------");
-
+        System.out.println("-----------");
+        semi.checkAccountBalance(nhnBank);
+        soon.checkAccountBalance(nhnBank);
+        sem.checkAccountBalance(nhnBank);
+        soo.checkAccountBalance(nhnBank);
+        joon.checkAccountBalance(nhnBank);
     }
 }

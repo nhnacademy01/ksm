@@ -1,13 +1,11 @@
 package bank;
 
 public class Account {
-    private String nickName;
     private Money balance;
     private float interestRate;
     private String holder;
 
-    public Account(String nickName, Money balance, float interestRate, String holder) {
-        this.nickName = nickName;
+    public Account(Money balance, float interestRate, String holder) {
         this.balance = balance;
         this.interestRate = interestRate;
         this.holder = holder;
@@ -16,21 +14,36 @@ public class Account {
     // 입금
     public void deposit(Money amount) {
         // 제약 조건
-        this.balance.add(amount);
+        if (this.balance.isSameCurrency(amount.currency)) {
+            this.balance.add(amount);
+        } else {
+            throw new InvalidCurrencyException("현재 계좌 허용 통화 : " + this.balance.currency + "\n" + "입금하려는 통화 : " + amount.currency);
+        }
     }
 
     // 출금
     public void withdrawal(Money amount) {
-        try {
-            this.balance.substract(amount);
-        }catch(InvalidMoneyException e){
-            System.out.println("[잔액 부족]");
-            System.out.println("Message : " + e.getMessage());
+        // 제약 조건
+        if (this.balance.isSameCurrency(amount.currency)) {
+            try {
+                this.balance.substract(amount);
+            } catch (InvalidMoneyException e) {
+                System.out.println("[잔액 부족]");
+                System.out.println("Message : " + e.getMessage());
+            }
+        } else {
+            throw new InvalidCurrencyException("현재 계좌 허용 통화 : " + this.balance.currency + "\n" + "입금하려는 통화 : " + amount.currency);
         }
     }
 
-    public String getNickName() {
-        return this.nickName;
+    private Money calculateInterest() {
+        return new Money((long) (this.balance.amount * interestRate), balance.currency);
+    }
+
+    public void payInterest() {
+        Money interest = calculateInterest();
+        System.out.printf("%s 님 계좌의 이번달 이자는 %d 입니다.%n", holder, interest.amount);
+        this.balance.add(interest);
     }
 
     public long getBalance() {
@@ -39,15 +52,5 @@ public class Account {
 
     public String getHolder() {
         return holder;
-    }
-
-    private Money calculateInterest() {
-        return new Money((long) (this.balance.amount*interestRate),"WON");
-    }
-
-    public void payInterest() {
-        Money interest = calculateInterest();
-        System.out.printf("%s 님의 %s 계좌의 이번달 이자는 %d 입니다.%n",holder,nickName,interest.amount);
-        this.balance.add(interest);
     }
 }

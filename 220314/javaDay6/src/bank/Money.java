@@ -9,7 +9,6 @@ public class Money {
             throw new InvalidMoneyException("Money is not negative. " + amount);
         }
         if (!isSupportedCurrency(currency)) {   // 지원되지 않는 통화의 경우.
-            System.out.println(currency);
             throw new InvalidMoneyException("Not supported currency. " + currency);
         }
         this.amount = amount;
@@ -20,7 +19,7 @@ public class Money {
         return "WON".equals(currency) || "DOLOR".equals(currency);
     }
 
-    private boolean isSameCurrency(String currency) {
+    public boolean isSameCurrency(String currency) {
         return this.currency.equals(currency);
     }
 
@@ -34,7 +33,7 @@ public class Money {
         this.amount -= amount.amount;
         if (this.amount < 0L) {
             this.amount += amount.amount;
-            throw new InvalidMoneyException("잔액이 부족합니다. 현재 잔액 : " + amount.amount);
+            throw new LackMoneyException("잔액이 부족합니다. 현재 잔액 : " + this.amount);
         }
     }
 }
