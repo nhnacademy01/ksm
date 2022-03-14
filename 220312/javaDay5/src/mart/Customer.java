@@ -45,6 +45,7 @@ class NormalCustomer extends Customer{
         System.out.println("일반 고객 입장");
     }
 
+    @Override
     public void payTo(Counter counter, Price totalPrice) {
         if (totalPrice.value != 0) {
             totalPrice = counter.discountProcess(useTenPercentCoupon(), totalPrice);
@@ -66,6 +67,7 @@ class VIPCustomer extends Customer {
         return wallet.getVIPTwentyPercentCoupon();
     }
 
+    @Override
     public void payTo(Counter counter, Price totalPrice) {
         if (totalPrice.value != 0) {
             totalPrice = counter.discountProcess(useVIPTwentyPercentCoupon(), totalPrice);
