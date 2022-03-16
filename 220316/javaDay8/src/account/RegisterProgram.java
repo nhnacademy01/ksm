@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 class RegisterProgram {
-    private final int MAX_USERS = 100;
     // CollectionFramework - 수정부분
     // Account[] users = new Account[MAX_USERS]; // 기존
     List<Account> users = new ArrayList<>(); // 수정
