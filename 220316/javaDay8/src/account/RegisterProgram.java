@@ -1,14 +1,19 @@
 package account;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 class RegisterProgram {
     private final int MAX_USERS = 100;
-    Account[] users = new Account[MAX_USERS];
+    // CollectionFramework - 수정부분
+    // Account[] users = new Account[MAX_USERS]; // 기존
+    List<Account> users = new ArrayList<>(); // 수정
 
     Account registerInfo; //회원가입시 입력한 내용
     String checkPassword; //비밀번호 재입력 확인
-    int userCounts = 0; //가입자수
+    // CollectionFramework - 수정부분
+    //int userCounts = 0; //기존 -> List에서 size()를 사용할 수 있으므로 필요 없다고 판단
 
     public void join() {
         registerInfo = new Account();
@@ -25,9 +30,12 @@ class RegisterProgram {
         System.out.print("권한(1:관리자, 2:일반) > ");
         registerInfo.authority = scanner.nextInt();
 
+        // CollectionFramework - 수정부분
         if (!isOverlapId(registerInfo) && isSamePassword(registerInfo)) {
-            users[userCounts] = checkAuthority(registerInfo);
-            userCounts++;
+            // 기존
+//            users[userCounts] = checkAuthority(registerInfo);
+//            userCounts++;
+            users.add(checkAuthority(registerInfo)); // 수정
         } else {
             join();
         }
@@ -42,10 +50,22 @@ class RegisterProgram {
     }
 
     public boolean isOverlapId(Account registerInfo) {
-        for (int i = 0; i < userCounts; i++) {
-            if (users[i] == null) {
+        // CollectionFramework - 수정부분
+        // 기존
+//        for (int i = 0; i < users.size(); i++) {
+//            if (users[i] == null) {
+//                break;
+//            } else if (users[i].id.equals(registerInfo.id)) {
+//                System.out.println("if fail > '아이디 중복' 때문에 회원가입에 실패했습니다.");
+//                System.out.println("----------------------------------------------------");
+//                return true;
+//            }
+//        }
+        // 수정
+        for (Account user : this.users) {
+            if (user == null) {
                 break;
-            } else if (users[i].id.equals(registerInfo.id)) {
+            } else if (user.id.equals(registerInfo.id)) {
                 System.out.println("if fail > '아이디 중복' 때문에 회원가입에 실패했습니다.");
                 System.out.println("----------------------------------------------------");
                 return true;
@@ -82,15 +102,17 @@ class RegisterProgram {
     }
 
     private boolean findByUserId(String id, String password) {
-        for (int i = 0; i < userCounts; i++) {
+        // CollectionFramework - 수정부분
+        // FIXME: foreach로 바꾸고 isUserId도 수정 가능할듯
+        for (int i = 0; i < users.size(); i++) { //userCounts -> users.size()
             if (isUserId(id, i)) {
                 if (isUserPassword(password, i) && !isLockAccount(i)) {
-                    users[i].loginTryCounts = 0;
-                    System.out.printf("if success > [%s] 님 환영합니다.%n", users[i].name);
+                    users.get(i).loginTryCounts = 0; // users[i] -> users.get(i)
+                    System.out.printf("if success > [%s] 님 환영합니다.%n", users.get(i).name); // users[i] -> users.get(i)
                     System.out.println("----------------------------------------------------");
                     return true;
                 }
-                return lock(users[i]);
+                return lock(users.get(i)); // users[i] -> users.get(i)
             }
         }
         printLoginFail();
@@ -98,11 +120,11 @@ class RegisterProgram {
     }
 
     private boolean isUserId(String id, int i) {
-        return users[i].id.equals(id);
+        return users.get(i).id.equals(id);
     }
 
     private boolean isUserPassword(String password, int i) {
-        return users[i].password.equals(password);
+        return users.get(i).password.equals(password);
     }
 
     private boolean lock(Account user) {
@@ -120,7 +142,7 @@ class RegisterProgram {
     }
 
     private boolean isLockAccount(int i) {
-        return users[i].loginTryCounts >= 4;
+        return users.get(i).loginTryCounts >= 4;
     }
 
     private void printLoginFail() {

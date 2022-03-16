@@ -21,20 +21,12 @@ class Account {
 }
 class Admin extends Account {
     Admin(Account adminInfo) {
-        this.id = adminInfo.id;
-        this.password = adminInfo.password;
-        this.name = adminInfo.name;
-        this.authority = adminInfo.authority;
-        this.loginTryCounts = adminInfo.loginTryCounts;
+        super(adminInfo.id, adminInfo.password, adminInfo.name, adminInfo.authority);
     }
 }
 
 class User extends Account {
     User(Account userInfo) {
-        this.id = userInfo.id;
-        this.password = userInfo.password;
-        this.name = userInfo.name;
-        this.authority = userInfo.authority;
-        this.loginTryCounts = userInfo.loginTryCounts;
+        super(userInfo.id, userInfo.password, userInfo.name, userInfo.authority);
     }
 }
