@@ -2,13 +2,14 @@ package bank;
 
 public class Customer {
     private final String name;
-    public Account account;
-    private Money money;
+    private Account account; // [수정] 접근 제어자 public -> private 으로 변경
+    // private Money money;
+    private Wallet wallet; // [수정] Wallet 클래스 생성
 
     public Customer(String name, long amount, String currency) {
         this.name = name;
         try {
-            this.money = new Money(amount, currency);
+            this.wallet = new Wallet(new Money(amount, currency));
         } catch (InvalidMoneyException e) {
             System.out.println("[고객 잔액 이슈]");
             System.out.println("Message : " + e.getMessage());
@@ -21,9 +22,10 @@ public class Customer {
 
     public void depositAccount(long amount, String currency) {
         try {
-            Money amounts = new Money(amount, currency);
-            this.money.substract(amounts);
-            account.deposit(amounts);
+            Money money = new Money(amount, currency);
+//            this.money.substract(amounts); // 기존
+            this.wallet.expenditure(money); // [수정]
+            account.deposit(money);
         } catch (LackMoneyException e) {
             System.out.println("[고객 지갑 이슈]");
             System.out.println("Message : " + e.getMessage());
@@ -38,9 +40,10 @@ public class Customer {
 
     public void withdrawalAccount(long amount, String currency) {
         try {
-            Money amounts = new Money(amount, currency);
-            account.withdrawal(amounts);
-            this.money.add(amounts);
+            Money money = new Money(amount, currency);
+            this.account.withdrawal(money);
+            //this.money.add(amounts);
+            this.wallet.income(money);// 수정
         } catch (InvalidCurrencyException e) {
             System.out.println("[출금 - 통화 이슈]");
             System.out.println("Message : " + e.getMessage());
@@ -56,7 +59,6 @@ public class Customer {
         } catch (NullPointerException e) {
             System.out.println(this.name + "의 계좌가 생성되지 않았습니다.");
         }
-
     }
 
     public String getName() {

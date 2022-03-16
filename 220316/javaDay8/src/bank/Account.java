@@ -1,6 +1,6 @@
 package bank;
 
-public class Account {
+class Account {
     private Money balance;
     private float interestRate;
     private String holder;
@@ -12,7 +12,7 @@ public class Account {
     }
 
     // 입금
-    public void deposit(Money amount) {
+    void deposit(Money amount) {
         // 제약 조건
         if (this.balance.isSameCurrency(amount.currency)) {
             this.balance.add(amount);
@@ -22,7 +22,7 @@ public class Account {
     }
 
     // 출금
-    public void withdrawal(Money amount) {
+    void withdrawal(Money amount) {
         // 제약 조건
         if (this.balance.isSameCurrency(amount.currency)) {
             try {
@@ -36,14 +36,14 @@ public class Account {
         }
     }
 
-    private Money calculateInterest() {
-        return new Money((long) (this.balance.amount * interestRate), balance.currency);
-    }
-
-    public void payInterest() {
+    void payInterest() {
         Money interest = calculateInterest();
         System.out.printf("%s 님 계좌의 이번달 이자는 %d 입니다.%n", holder, interest.amount);
         this.balance.add(interest);
+    }
+
+    private Money calculateInterest() {
+        return new Money((long) (this.balance.amount * interestRate), balance.currency);
     }
 
     public long getBalance() {
