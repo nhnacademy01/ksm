@@ -20,45 +20,53 @@ public class Customer {
         this.account = account;
     }
 
-    public void depositAccount(long amount, String currency) {
-        try {
-            Money money = new Money(amount, currency);
-//            this.money.substract(amounts); // 기존
-            this.wallet.expenditure(money); // [수정]
-            account.deposit(money);
-        } catch (LackMoneyException e) {
-            System.out.println("[고객 지갑 이슈]");
-            System.out.println("Message : " + e.getMessage());
-        } catch (InvalidCurrencyException e) {
-            System.out.println("[입금 - 통화 이슈]");
-            System.out.println("Message : " + e.getMessage());
-        } catch (InvalidMoneyException e) {
-            System.out.println("[입금 이슈]");
-            System.out.println("Message : " + e.getMessage());
-        }
+    public void depositAccount(Money money) {
+        // 기존
+//        try {
+//            Money amounts = new Money(amount, currency);
+//             this.money.substract(amounts);
+//             account.deposit(amounts);
+//        } catch (LackMoneyException e) {
+//            System.out.println("[고객 지갑 이슈]");
+//            System.out.println("Message : " + e.getMessage());
+//        } catch (InvalidCurrencyException e) {
+//            System.out.println("[입금 - 통화 이슈]");
+//            System.out.println("Message : " + e.getMessage());
+//        } catch (InvalidMoneyException e) {
+//            System.out.println("[입금 이슈]");
+//            System.out.println("Message : " + e.getMessage());
+//        }
+        // [수정]
+        this.wallet.expenditure(money, this.account);
     }
 
-    public void withdrawalAccount(long amount, String currency) {
-        try {
-            Money money = new Money(amount, currency);
-            this.account.withdrawal(money);
-            //this.money.add(amounts);
-            this.wallet.income(money);// 수정
-        } catch (InvalidCurrencyException e) {
-            System.out.println("[출금 - 통화 이슈]");
-            System.out.println("Message : " + e.getMessage());
-        } catch (InvalidMoneyException e) {
-            System.out.println("[출금 이슈]");
-            System.out.println("Message : " + e.getMessage());
-        }
+    public void withdrawalAccount(Money money) {
+        // 기존
+//        try {
+//            Money amounts = new Money(amount, currency);
+//            this.account.withdrawal(amounts);
+//            this.money.add(amounts);
+//        } catch (InvalidCurrencyException e) {
+//            System.out.println("[출금 - 통화 이슈]");
+//            System.out.println("Message : " + e.getMessage());
+//        } catch (InvalidMoneyException e) {
+//            System.out.println("[출금 이슈]");
+//            System.out.println("Message : " + e.getMessage());
+//        }
+        // [수정]
+        this.wallet.income(money, this.account);
     }
 
-    public void checkAccountBalance(Bank bank) {
-        try {
-            bank.printAccountBalance(account);
-        } catch (NullPointerException e) {
-            System.out.println(this.name + "의 계좌가 생성되지 않았습니다.");
-        }
+
+    public long getAccountBalance() {
+        // 기존
+//        try {
+//            bank.printAccountBalance(account);
+//        } catch (NullPointerException e) {
+//            System.out.println(this.name + "의 계좌가 생성되지 않았습니다.");
+//        }
+        // [수정]
+        return this.account.getBalance();
     }
 
     public String getName() {

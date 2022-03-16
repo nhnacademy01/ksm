@@ -20,6 +20,27 @@ public class Bank {
         }
     }
 
+    // [수정] - 추가
+    void deposit(Customer customer, long amount, String currency){
+        try {
+            Money money = new Money(amount, currency);
+            customer.depositAccount(money);
+        } catch (InvalidMoneyException e) {
+            System.out.println("[입금 이슈]");
+            System.out.println("Message : " + e.getMessage());
+        }
+    }
+    // [수정] - 추가
+    void withdrawal(Customer customer, long amount, String currency){
+        try {
+            Money money = new Money(amount, currency);
+            customer.withdrawalAccount(money);
+        } catch (InvalidMoneyException e) {
+            System.out.println("[출금 이슈]");
+            System.out.println("Message : " + e.getMessage());
+        }
+    }
+
     // 예금 이자 지급
     public void payInterestOnAllAccounts() {
         for(Account account : accounts) {
@@ -27,7 +48,12 @@ public class Bank {
         }
     }
 
-    public void printAccountBalance(Account account) {
-        System.out.printf("%s 님 계좌의 잔액은 %d 원 입니다.%n",account.getHolder(), account.getBalance());
+    // [수정]
+    public void printAccountBalance(Customer customer) {
+        try {
+            System.out.printf("%s 님 계좌의 잔액은 %d 원 입니다.%n",customer.getName(), customer.getAccountBalance());
+        } catch (NullPointerException e) {
+            System.out.println(customer.getName() + "의 계좌가 생성되지 않았습니다.");
+        }
     }
 }
