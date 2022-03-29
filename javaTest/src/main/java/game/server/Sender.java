@@ -2,12 +2,12 @@ package game.server;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-public class Sender {
-    private final ConcurrentHashMap<String, DataOutputStream> clientOutMap;
+class Sender {
+    private final ConcurrentMap<String, DataOutputStream> clientOutMap;
 
-    public Sender(ConcurrentHashMap<String, DataOutputStream> clientOutMap) {
+    public Sender(ConcurrentMap<String, DataOutputStream> clientOutMap) {
         this.clientOutMap = clientOutMap;
     }
 

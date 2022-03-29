@@ -2,7 +2,7 @@ package game.server;
 
 import java.io.IOException;
 
-public class Stage {
+class Stage {
     private final GameServer.ClientSession clientSession;
     private final Warrior warrior;
     private final Sender sender;
@@ -31,13 +31,15 @@ public class Stage {
             case 3:
                 monster = new Dragon(warrior, sender);
                 break;
+            default:
+                break;
         }
     }
 
     private void startStage() {
-        sender.sendToClient("야생의 " + monster.getName() + "이 나타났다.\n" +
-                "1. 공격\n" +
-                "2. 도망간다. (게임 종료)", clientSession.getOut());
+        sender.sendToClient("야생의 " + monster.getName() + "이 나타났다.\n"
+            + "1. 공격\n"
+            + "2. 도망간다. (게임 종료)", clientSession.getOut());
         warrior.setEnemy(monster);
         decideFight();
     }
@@ -75,8 +77,8 @@ public class Stage {
     }
 
     private void monsterWin() {
-        sender.sendToClient(monster.getName() + "이 승리했다.\n" +
-                "--게임을 종료합니다.--", clientSession.getOut());
+        sender.sendToClient(monster.getName() + "이 승리했다.\n"
+            + "--게임을 종료합니다.--", clientSession.getOut());
         end = true;
     }
 
@@ -87,8 +89,8 @@ public class Stage {
         } else {
             sender.sendToClient(monster.getName() + "을 물리쳤다.", clientSession.getOut());
             if (monster instanceof Oak) {
-                sender.sendToClient("--빠밤!!레벨업 하셨습니다!!빠밤--\n" +
-                        "(현재 레벨 : 2 현재 체력 : 150 현재 공격력 : 20)", clientSession.getOut());
+                sender.sendToClient("--빠밤!!레벨업 하셨습니다!!빠밤--\n"
+                    + "(현재 레벨 : 2 현재 체력 : 150 현재 공격력 : 20)", clientSession.getOut());
             }
             sender.sendToClient("-- 계속 하려면 엔터를 입력해주세요. --", clientSession.getOut());
         }

@@ -1,6 +1,6 @@
 package game.server;
 
-public class Dual {
+class Dual {
     private String winner;
 
     public void warriorVsMonster(Warrior warriorR, Monster monsterR) {
@@ -15,18 +15,23 @@ public class Dual {
             monster.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 
     public String whoIsWinner(Warrior warriorR, Monster monsterR) {
         if (warriorR.getHealth() > monsterR.getHealth()) {
             winner = warriorR.getId();
-            if(monsterR instanceof Oak){
-                warriorR.levelUP();
-            }
+            isMonsterOak(warriorR, monsterR);
         } else if (warriorR.getHealth() < monsterR.getHealth()) {
             winner = monsterR.getName();
         }
         return winner;
+    }
+
+    private void isMonsterOak(Warrior warriorR, Monster monsterR) {
+        if (monsterR instanceof Oak) {
+            warriorR.levelUp();
+        }
     }
 }

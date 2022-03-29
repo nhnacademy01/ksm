@@ -4,11 +4,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
-public class GameClient {
+class GameClient {
     private final String id;
+    private static final String MESSAGE_TEMPLATE = "message : ";
 
     public GameClient(String id) {
         this.id = id;
@@ -21,33 +21,31 @@ public class GameClient {
         }
         String id = args[0];
         GameClient client = new GameClient(id);
-        client.connect("127.0.0.1", 8081);
+        client.connect();
     }
 
-    private static boolean hasNotArgs(String[] args) {
+    static boolean hasNotArgs(String[] args) {
         return args.length == 0;
     }
 
-    private void connect(String serverHost, int port) {
+    private void connect() {
         try {
-            Socket socket = new Socket(serverHost, port);
-            System.out.println("Connected to server " + serverHost + ":" + port);
+            Socket socket = new Socket("127.0.0.1", 8888);
+            System.out.println("Connected to server " + "127.0.0.1" + ":" + 8888);
 
             Thread sender = new Sender(socket, id);
             Thread receiver = new Receiver(socket);
 
             sender.start();
             receiver.start();
-        } catch (UnknownHostException e) {
-            System.out.println("message : "+e.getMessage());
-        } catch (IOException e) {
-            System.out.println("message : "+e.getMessage());
+        }  catch (IOException e) {
+            System.out.println(MESSAGE_TEMPLATE + e.getMessage());
         }
     }
 
     private static class Sender extends Thread {
-        private String id;
-        private DataOutputStream out;
+        private final String id;
+        private final DataOutputStream out;
 
         private Sender(Socket socket, String id) throws IOException {
             this.id = id;
@@ -60,23 +58,23 @@ public class GameClient {
                 initialize();
                 sendMessage();
             } catch (IOException e) {
-                System.out.println("message : " + e.getMessage());
+                System.out.println(MESSAGE_TEMPLATE + e.getMessage());
             }
         }
 
         private void initialize() throws IOException {
-            if (isSendable()) {
+            if (isSend()) {
                 this.out.writeUTF(id);
             }
         }
 
-        private boolean isSendable() {
+        private boolean isSend() {
             return this.out != null;
         }
 
         private void sendMessage() throws IOException {
             try (Scanner scanner = new Scanner(System.in)) {
-                while (isSendable()) {
+                while (isSend()) {
                     this.out.writeUTF(scanner.nextLine());
                 }
             }
@@ -105,7 +103,7 @@ public class GameClient {
             try {
                 System.out.println(in.readUTF());
             } catch (IOException e) {
-                System.out.println("message : " + e.getMessage());
+                System.out.println(MESSAGE_TEMPLATE + e.getMessage());
             }
         }
     }

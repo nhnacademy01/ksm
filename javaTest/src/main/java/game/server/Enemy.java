@@ -1,8 +1,8 @@
 package game.server;
 
-abstract public class Enemy {
+abstract class Enemy {
     protected String name;
-    public int health;
+    private int health;
 
     public void damaged(int damage) {
         this.health -= damage;
@@ -14,5 +14,9 @@ abstract public class Enemy {
 
     public int getHealth() {
         return this.health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }
